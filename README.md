@@ -1,4 +1,4 @@
-# Spring Redis Example
+# Spring Redis Demo
 
 A Spring Boot application demonstrating caching with Redis, including Testcontainers-based integration tests.
 
