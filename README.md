@@ -24,6 +24,7 @@ static void redisProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.redis.host", redis::getHost);
     registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
 }
+```
 
 When integration tests or the Spring Boot app starts, Testcontainers:
 	1.	Pulls the Redis Docker image (if not already available locally).
