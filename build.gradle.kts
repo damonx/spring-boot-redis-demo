@@ -32,6 +32,19 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    reports {
+        junitXml.required.set(true)
+        html.required.set(true)
+    }
+    testLogging {
+        events("started", "passed", "skipped", "failed")
+
+        showStandardStreams = true
+        showCauses = true
+        showStackTraces = true
+
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {

@@ -122,7 +122,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Test getAllUsers returns immutable map")
+    @DisplayName("Test getAllUsers returns immutable map.")
     void testGetAllUsers() {
         Map<Long, User> users = userService.getAllUsers();
         assertThat(users).isNotEmpty();

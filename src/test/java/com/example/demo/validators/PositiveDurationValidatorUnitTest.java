@@ -44,6 +44,7 @@ public class PositiveDurationValidatorUnitTest
         // WHEN
         boolean isValid = positiveDurationValidator.isValid(redisExtraPropertiesUnderTest.getTtl(), context);
         // THEN
+        assertThat(redisExtraPropertiesUnderTest.getTtl()).isPositive();
         assertThat(isValid).isTrue();
     }
 
@@ -66,6 +67,7 @@ public class PositiveDurationValidatorUnitTest
         // WHEN
         boolean isValid = positiveDurationValidator.isValid(redisExtraPropertiesUnderTest.getTtl(), context);
         // THEN
+        assertThat(redisExtraPropertiesUnderTest.getTtl()).isLessThanOrEqualTo(Duration.ZERO);
         assertThat(isValid).isFalse();
     }
 }
