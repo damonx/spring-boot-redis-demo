@@ -43,11 +43,13 @@ When integration tests or the Spring Boot app starts, Testcontainers:
 - Gradle build
 
 ## 📦 Project Structure
+```bash
 src/
 ├── main/java/…/configuration   # RedisConfig
 ├── main/java/…/model          # User.java
 ├── main/java/…/service        # UserService.java
 └── test/java/…/service        # UserServiceTest.java (Testcontainers)
+```
 
 ## ⚙️ Dependencies (build.gradle)
 
@@ -67,11 +69,12 @@ Run this to build the project, compile tests, and resolve dependencies:
 
 ```bash
 ./gradlew clean build
-
+```
 
 ## 🧪 Running Tests (Redis via Testcontainers)
 ```bash
 ./gradlew test
+```
 
 ## 🚀 Running the App
 
@@ -79,3 +82,4 @@ Make sure Redis is running locally (or rely on defaults from Testcontainers).
 
 ```bash
 ./gradlew bootRun
+```
