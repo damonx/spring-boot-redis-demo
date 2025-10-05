@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.example.demo.model.User;
 import com.redis.testcontainers.RedisContainer;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -19,7 +20,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
 @Testcontainers
@@ -69,6 +69,7 @@ class UserServiceTest {
         assertThat(userFromDb).isNotNull();
         assertThat(userFromDb.name()).isEqualTo("Alice");
         assertThat(userFromDb.email()).isEqualTo("alice@example.com");
+        assertThat(userFromDb.createdAt()).isEqualTo(Instant.parse("2025-10-06T00:00:00Z"));
         assertThat(userFromCache).isNotNull();
         assertThat(userFromCache).usingRecursiveComparison().isEqualTo(userFromDb);
     }
@@ -87,7 +88,6 @@ class UserServiceTest {
         assertThat(cached).isEqualTo(newUser);
 
         // Fetch from service -> should be cached
-
         assertThat(fetched).isEqualTo(newUser);
     }
 
@@ -131,16 +131,26 @@ class UserServiceTest {
     void testGetAllUsers() {
         // GIVEN
         userService.removeAllUsers();
-        userService.addUser(new User(1L, "Alice", "alice@example.com", Instant.now()));
-        userService.addUser(new User(2L, "Bob", "bob@example.com", Instant.now()));
+        userService.addUser(new User(1L, "Alice", "alice@example.com", Instant.parse("2025-10-06T00:00:00Z")));
+        userService.addUser(new User(2L, "Bob", "bob@example.com", Instant.parse("2025-10-06T01:00:00Z")));
 
         // WHEN
         final Map<Long, User> users = userService.getAllUsers();
         // THEN
         assertThat(users)
             .hasSize(2)
-            .containsEntry(1L, new User(1L, "Alice", "alice@example.com", users.get(1L).createdAt()))
-            .containsEntry(2L, new User(2L, "Bob", "bob@example.com", users.get(2L).createdAt()));
+            .anySatisfy((key, user) -> {
+                assertThat(key).isEqualTo(1L);
+                assertThat(user.name()).isEqualTo("Alice");
+                assertThat(user.email()).isEqualTo("alice@example.com");
+                assertThat(user.createdAt()).isEqualTo(Instant.parse("2025-10-06T00:00:00Z"));
+            })
+            .anySatisfy((key, user) -> {
+                assertThat(key).isEqualTo(2L);
+                assertThat(user.name()).isEqualTo("Bob");
+                assertThat(user.email()).isEqualTo("bob@example.com");
+                assertThat(user.createdAt()).isEqualTo(Instant.parse("2025-10-06T01:00:00Z"));
+            });
         // Map should be unmodifiable
         assertThatThrownBy(() -> users.put(99L, new User(99L, "X", "x@example.com", Instant.now())))
             .isInstanceOf(UnsupportedOperationException.class);

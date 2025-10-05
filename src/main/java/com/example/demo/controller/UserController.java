@@ -22,7 +22,7 @@ public class UserController {
     // GET /api/users/{id} -> fetch user by ID (cached)
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
+        final User user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
         return ResponseEntity.ok(
-            userService.getAllUsers() // or map of users if you add a method
+            userService.getAllUsers()
         );
     }
 }

@@ -16,8 +16,8 @@ public class UserService {
 
     // Simulate a database
     private static final Map<Long, User> USER_DATABASE = new HashMap<>(Map.of(
-        1L, new User(1L, "Alice", "alice@example.com", Instant.now()),
-        2L, new User(2L, "Bob", "bob@example.com", Instant.now())
+        1L, new User(1L, "Alice", "alice@example.com", Instant.parse("2025-10-06T00:00:00Z")),
+        2L, new User(2L, "Bob", "bob@example.com", Instant.parse("2025-10-06T00:05:00Z"))
     ));
 
     @Cacheable(cacheNames = "users", key = "#id", unless = "#result == null")
