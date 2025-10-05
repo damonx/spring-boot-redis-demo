@@ -21,13 +21,11 @@ public class UserController {
 
     // GET /api/users/{id} -> fetch user by ID (cached)
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        final User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<User> getUserById(@PathVariable Long id, @RequestParam(name = "bypassCache", defaultValue = "false") boolean bypassCache) {
+        if (bypassCache) {
+            return ResponseEntity.ok(userService.getUserByIdBypassCache(id));
         }
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @GetMapping

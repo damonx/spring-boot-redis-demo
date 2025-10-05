@@ -60,6 +60,21 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Test measuring the getUserByIdBypassingCache is slower than get.")
+    void testCacheableBypassingCache() {
+        // GIVEN,WHEN
+        // Warm up the cache.
+        userService.getUserById(1L);
+        // Fetch user from cache.
+        final Duration t2 = measure(() -> userService.getUserById(1L));
+        // Bypassing cache
+        final Duration t3 = measure(() -> userService.getUserByIdBypassCache(1L));
+
+        // THEN
+        assertThat(t2).isLessThan(t3.dividedBy(2));
+    }
+
+    @Test
     @DisplayName("Test fetching from cache got the same user having same value.")
     void testCacheFeachValues() {
         // GIVEN,WHEN

@@ -130,8 +130,8 @@ Running Gradle task: build...
     00:50:28.073 [Test worker] INFO tc.redis:7.0.11-alpine -- Creating container for image: redis:7.0.11-alpine
     00:50:28.094 [Test worker] INFO tc.redis:7.0.11-alpine -- Container redis:7.0.11-alpine is starting: 20d7278ed40f8bfd6a5f15ab52bd63d3ea1fff0d9e4b5983eac018c6d5498bad
     00:50:28.218 [Test worker] INFO tc.redis:7.0.11-alpine -- Container redis:7.0.11-alpine started in PT0.145857S
-    00:50:28.270 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.service.UserServiceTest]: UserServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-    00:50:28.324 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.SpringRedisDemoApplication for test class com.example.demo.service.UserServiceTest
+    00:50:28.270 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.service.UserServiceImplTest]: UserServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+    00:50:28.324 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.SpringRedisDemoApplication for test class com.example.demo.service.UserServiceImplTest
 
       .   ____          _            __ _ _
      /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \

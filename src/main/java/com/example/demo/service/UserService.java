@@ -1,67 +1,61 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
-@Service
-public class UserService {
-
-    // Simulate a database
-    private static final Map<Long, User> USER_DATABASE = new HashMap<>(Map.of(
-        1L, new User(1L, "Alice", "alice@example.com", Instant.parse("2025-10-06T00:00:00Z")),
-        2L, new User(2L, "Bob", "bob@example.com", Instant.parse("2025-10-06T00:05:00Z"))
-    ));
-
-    @Cacheable(cacheNames = "users", key = "#id", unless = "#result == null")
-    public User getUserById(Long id) {
-        System.out.println("Fetching from DB: " + id);
-        simulateLatency();
-        return USER_DATABASE.get(id);
-    }
-
-    @CachePut(value = "users", key = "#user.id")
-    public User addUser(User user) {
-        USER_DATABASE.put(user.id(), user);
-        return user;
-    }
-
-    @CacheEvict(value = "users", key = "#id")
-    public void removeUser(Long id) {
-        USER_DATABASE.remove(id);
-    }
-
-    @CachePut(value = "users", key = "#user.id")
-    public User updateUser(User user) {
-        USER_DATABASE.put(user.id(), user);
-        return user;
-    }
+/**
+ * Internal service which is responsible for CRUD operations on a given user.
+ */
+public interface UserService
+{
 
     /**
-     * Clears the entire "users" cache and the simulated database.
-     * @CacheEvict(value = "users", allEntries = true) ensures all cached user objects are removed.
+     * Retrieves a user by its ID.
+     *
+     * @param id the unique ID of the user.
+     * @return the matching {@link User}, or {@code null} if not found.
      */
-    @CacheEvict(value = "users", allEntries = true)
-    public void removeAllUsers() {
-        USER_DATABASE.clear();
-    }
+    User getUserById(Long id);
 
-    public Map<Long, User> getAllUsers() {
-        return Map.copyOf(USER_DATABASE);
-    }
+    /**
+     * Retrieves a user by its ID bypassing the cache.
+     * @param id the unique ID of the user.
+     * @return the matching {@link User}, or {@code null} if not found.
+     */
+    User getUserByIdBypassCache(Long id);
 
-    private void simulateLatency() {
-        try {
-            Thread.sleep(Duration.ofMillis(500));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
+    /**
+     * Adds a new user to the underlying data store and updates the cache.
+     *
+     * @param user the {@link User} instance to be added.
+     * @return the newly added {@link User}.
+     */
+    User addUser(User user);
+
+    /**
+     * Removes a user with the specified ID from both the data store and the cache.
+     *
+     * @param id the unique ID of the user to remove.
+     */
+    void removeUser(Long id);
+
+    /**
+     * Updates an existing user in the data store and refreshes the corresponding cache entry.
+     *
+     * @param user the {@link User} instance with updated information.
+     * @return the updated {@link User}, or {@code null} if the user does not exist.
+     */
+    User updateUser(User user);
+
+    /**
+     * Removes all users from both the cache and the underlying data store.
+     */
+    void removeAllUsers();
+
+    /**
+     * Retrieves an immutable view of all users currently in the data store.
+     *
+     * @return a {@link Map} of user IDs to {@link User} objects.
+     */
+    Map<Long, User> getAllUsers();
 }
