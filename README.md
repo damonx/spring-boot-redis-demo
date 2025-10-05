@@ -5,9 +5,9 @@ A Spring Boot application demonstrating caching with Redis, including Testcontai
 ## ✅ 1. Prerequisites
 
 Make sure one of the following is installed and running on your machine:
-	•	Docker Desktop (Windows / macOS)
+	- Docker Desktop (Windows / macOS)
 👉 https://www.docker.com/products/docker-desktop/
-	•	Docker Engine (Linux)
+	- Docker Engine (Linux)
 👉 https://docs.docker.com/engine/install/
 
 ## ✅ 2. How Redis is started
