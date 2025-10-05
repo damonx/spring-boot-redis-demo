@@ -44,11 +44,27 @@ When integration tests or the Spring Boot app starts, Testcontainers:
 
 ## 📦 Project Structure
 ```bash
-src/
-├── main/java/…/configuration   # RedisConfig
-├── main/java/…/model          # User.java
-├── main/java/…/service        # UserService.java
-└── test/java/…/service        # UserServiceTest.java (Testcontainers)
+    src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── example
+    │   │           └── demo
+    │   │               ├── configuration
+    │   │               ├── controller
+    │   │               ├── model
+    │   │               ├── properties
+    │   │               ├── service
+    │   │               └── validators
+    │   └── resources
+    └── test
+        ├── java
+        │   └── com
+        │       └── example
+        │           └── demo
+        │               ├── service
+        │               └── validators
+        └── resources
 ```
 
 ## ⚙️ Dependencies (build.gradle)
