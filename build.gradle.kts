@@ -26,7 +26,7 @@ dependencies {
     testImplementation("com.redis:testcontainers-redis:2.2.4")
     testImplementation("org.testcontainers:junit-jupiter:1.21.3")
     testImplementation("org.assertj:assertj-core:3.27.6")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0") // latest version
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0") // latest version
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
 }
 
@@ -45,6 +45,7 @@ tasks.test {
 
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
