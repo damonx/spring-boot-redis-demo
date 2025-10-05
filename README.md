@@ -2,8 +2,37 @@
 
 A Spring Boot application demonstrating caching with Redis, including Testcontainers-based integration tests.
 
-## ✅ Features
+## ✅ 1. Prerequisites
 
+Make sure one of the following is installed and running on your machine:
+	•	Docker Desktop (Windows / macOS)
+👉 https://www.docker.com/products/docker-desktop/
+	•	Docker Engine (Linux)
+👉 https://docs.docker.com/engine/install/
+
+## ✅ 2. How Redis is started
+
+You do not need to run Redis manually.
+The project uses the following Testcontainers setup (example):
+
+```java
+@Container
+static RedisContainer redis = new RedisContainer("redis:7.0.11-alpine");
+
+@DynamicPropertySource
+static void redisProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.data.redis.host", redis::getHost);
+    registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
+}
+
+When integration tests or the Spring Boot app starts, Testcontainers:
+	1.	Pulls the Redis Docker image (if not already available locally).
+	2.	Runs it in a container.
+	3.	Injects host and port into Spring config.
+
+
+
+## ✅ Features
 - Spring Boot (Java 21 compatible)
 - Redis cache with `LettuceConnectionFactory`
 - `@Cacheable`, `@CachePut`, and `@CacheEvict`
@@ -49,4 +78,3 @@ Make sure Redis is running locally (or rely on defaults from Testcontainers).
 
 ```bash
 ./gradlew bootRun
-
