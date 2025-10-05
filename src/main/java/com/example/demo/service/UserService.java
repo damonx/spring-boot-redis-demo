@@ -15,7 +15,7 @@ import java.util.Map;
 public class UserService {
 
     // Simulate a database
-    private final Map<Long, User> userDatabase = new HashMap<>(Map.of(
+    private static final Map<Long, User> USER_DATABASE = new HashMap<>(Map.of(
         1L, new User(1L, "Alice", "alice@example.com", Instant.now()),
         2L, new User(2L, "Bob", "bob@example.com", Instant.now())
     ));
@@ -24,28 +24,28 @@ public class UserService {
     public User getUserById(Long id) {
         System.out.println("Fetching from DB: " + id);
         simulateLatency();
-        return userDatabase.get(id);
+        return USER_DATABASE.get(id);
     }
 
     @CachePut(value = "users", key = "#user.id")
     public User addUser(User user) {
-        userDatabase.put(user.id(), user);
+        USER_DATABASE.put(user.id(), user);
         return user;
     }
 
     @CacheEvict(value = "users", key = "#id")
     public void removeUser(Long id) {
-        userDatabase.remove(id);
+        USER_DATABASE.remove(id);
     }
 
     @CachePut(value = "users", key = "#user.id")
     public User updateUser(User user) {
-        userDatabase.put(user.id(), user);
+        USER_DATABASE.put(user.id(), user);
         return user;
     }
 
     public Map<Long, User> getAllUsers() {
-        return Map.copyOf(userDatabase); // unmodifiable
+        return Map.copyOf(USER_DATABASE);
     }
 
     private void simulateLatency() {

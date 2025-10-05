@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity<Object> getAllUsers() {
         // Simple endpoint for demonstration
         return ResponseEntity.ok(
-            userService.getUserById(1L) // or map of users if you add a method
+            userService.getAllUsers() // or map of users if you add a method
         );
     }
 }
