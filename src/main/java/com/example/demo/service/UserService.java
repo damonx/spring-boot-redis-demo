@@ -44,6 +44,15 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Clears the entire "users" cache and the simulated database.
+     * @CacheEvict(value = "users", allEntries = true) ensures all cached user objects are removed.
+     */
+    @CacheEvict(value = "users", allEntries = true)
+    public void removeAllUsers() {
+        USER_DATABASE.clear();
+    }
+
     public Map<Long, User> getAllUsers() {
         return Map.copyOf(USER_DATABASE);
     }

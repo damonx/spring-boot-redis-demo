@@ -5,6 +5,9 @@ import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * The controller of spring-boot-redis-demo application.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -27,10 +30,8 @@ public class UserController {
         }
     }
 
-    // Optional: GET all users
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
-        // Simple endpoint for demonstration
         return ResponseEntity.ok(
             userService.getAllUsers() // or map of users if you add a method
         );
