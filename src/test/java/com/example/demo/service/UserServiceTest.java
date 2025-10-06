@@ -32,9 +32,12 @@ import java.util.Map;
 class UserServiceTest {
     @MockBean(reset = MockReset.AFTER)
     private RefreshAheadScheduler refreshAheadScheduler;
-
     @MockBean(reset = MockReset.AFTER)
     private UserAccessTracker userAccessTracker;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CacheManager cacheManager;
 
     @Container
     static RedisContainer redis = new RedisContainer("redis:7.0.11-alpine");
@@ -45,11 +48,6 @@ class UserServiceTest {
         registry.add("spring.data.redis.host", redis::getHost);
         registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
     }
-
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CacheManager cacheManager;
 
     @BeforeEach
     void setup() {
