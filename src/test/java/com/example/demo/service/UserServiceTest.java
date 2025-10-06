@@ -26,7 +26,7 @@ import java.time.Instant;
 import java.util.Map;
 
 @Testcontainers
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("IntegrationTest")
 @DisplayName("User Service Redis Test with Redis running in TestContainer.")
 class UserServiceTest {
