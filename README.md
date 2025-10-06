@@ -52,9 +52,12 @@ When integration tests or the Spring Boot app starts, Testcontainers:
     │   │           └── demo
     │   │               ├── configuration
     │   │               ├── controller
+    │   │               ├── exception
     │   │               ├── model
     │   │               ├── properties
+    │   │               ├── scheduler
     │   │               ├── service
+    │   │               ├── tracker
     │   │               └── validators
     │   └── resources
     └── test
@@ -62,9 +65,11 @@ When integration tests or the Spring Boot app starts, Testcontainers:
         │   └── com
         │       └── example
         │           └── demo
+        │               ├── scheduler
         │               ├── service
         │               └── validators
         └── resources
+
 ```
 
 ## ⚙️ Dependencies (build.gradle)
