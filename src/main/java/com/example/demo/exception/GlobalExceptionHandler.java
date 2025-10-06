@@ -44,7 +44,7 @@ public class GlobalExceptionHandler
      * @return the instance of {@link ResponseEntity}.
      */
     @ExceptionHandler(SpringRedisDemoException.class)
-    public ResponseEntity<Response> handleGenericApiSimulatorError(final SpringRedisDemoException ex) {
+    public ResponseEntity<Response> handleGenericErrors(final SpringRedisDemoException ex) {
         final Response response = new Response();
         response.setMessages(ex.getMessages());
         return ResponseEntity

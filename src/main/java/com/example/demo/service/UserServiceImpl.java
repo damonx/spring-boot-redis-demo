@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService
     public User getUserByIdBypassCache(final Long id)
     {
         LOGGER.debug("Fetching user by ID bypassing cache: {}", id);
-        System.out.println("get user by id bypass cache");
         simulateLatency();
         final User user = USER_DATABASE.get(id);
         if (user != null) {
