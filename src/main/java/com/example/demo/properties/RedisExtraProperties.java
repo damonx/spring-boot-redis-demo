@@ -18,6 +18,13 @@ public class RedisExtraProperties {
     @DurationUnit(ChronoUnit.MINUTES)
     private Duration ttl;
 
+    /** Interval for refreshing hot users in the cache */
+    @PositiveDuration
+    @DurationUnit(ChronoUnit.MINUTES)
+    private Duration hotUserInterval;
+
+    private int topNUsers = 10;
+
     // Getters and Setters
     public Duration getTtl()
     {
@@ -27,5 +34,23 @@ public class RedisExtraProperties {
     public void setTtl(final Duration ttl)
     {
         this.ttl = ttl;
+    }
+
+    public Duration getHotUserInterval() {
+        return hotUserInterval;
+    }
+
+    public void setHotUserInterval(Duration hotUserInterval) {
+        this.hotUserInterval = hotUserInterval;
+    }
+
+    public int getTopNUsers()
+    {
+        return topNUsers;
+    }
+
+    public void setTopNUsers(final int topNUsers)
+    {
+        this.topNUsers = topNUsers;
     }
 }

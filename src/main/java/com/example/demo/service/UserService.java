@@ -19,10 +19,23 @@ public interface UserService
 
     /**
      * Retrieves a user by its ID bypassing the cache.
+     *
      * @param id the unique ID of the user.
      * @return the matching {@link User}, or {@code null} if not found.
      */
     User getUserByIdBypassCache(Long id);
+
+    /**
+     * Refreshes the given {@link User} in the cache.
+     * <p>
+     * This method forces the cache to be updated with the latest data for the specified user.
+     * It is typically used in a refresh-ahead pattern to keep frequently accessed users in cache.
+     * </p>
+     *
+     * @param id the user id.
+     */
+    void refreshUser(Long id);
+
 
     /**
      * Adds a new user to the underlying data store and updates the cache.

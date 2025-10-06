@@ -1,6 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+import com.example.demo.tracker.UserAccessTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +21,10 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @Autowired
+    private UserAccessTracker userAccessTracker;
 
     // Simulate a database
     private static final Map<Long, User> USER_DATABASE = new HashMap<>(Map.of(
@@ -24,24 +32,42 @@ public class UserServiceImpl implements UserService
         2L, new User(2L, "Bob", "bob@example.com", Instant.parse("2025-10-06T00:05:00Z"))
     ));
 
-    @Cacheable(cacheNames = "users", key = "#id", unless = "#result == null")
+    @Cacheable(cacheNames = "users", key = "#id", sync = true)
     public User getUserById(final Long id)
     {
+        LOGGER.debug("Fetching user from DB with ID: {}", id);
         simulateLatency();
-        return USER_DATABASE.get(id);
+        final User user = USER_DATABASE.get(id);
+        if  (user != null) {
+            userAccessTracker.recordAccess(id);
+        }
+        return user;
     }
 
     @Override
     public User getUserByIdBypassCache(final Long id)
     {
+        LOGGER.debug("Fetching user by ID bypassing cache: {}", id);
         System.out.println("get user by id bypass cache");
         simulateLatency();
-        return USER_DATABASE.get(id);
+        final User user = USER_DATABASE.get(id);
+        if (user != null) {
+            userAccessTracker.recordAccess(id); // Track access
+        }
+        return user;
+    }
+
+    // Refresh cache (fetch + update cache)
+    @CachePut(cacheNames = "users", key = "#id")
+    public void refreshUser(Long id) {
+        LOGGER.info("Refreshing user in cache: {}", id);
+        getUserByIdBypassCache(id); // fetch fresh data
     }
 
     @CachePut(value = "users", key = "#user.id")
     public User addUser(User user)
     {
+        LOGGER.info("Adding new user to database and cache: {}", user.id());
         USER_DATABASE.put(user.id(), user);
         return user;
     }
@@ -49,12 +75,14 @@ public class UserServiceImpl implements UserService
     @CacheEvict(value = "users", key = "#id")
     public void removeUser(Long id)
     {
+        LOGGER.info("Removing user from database and cache: {}", id);
         USER_DATABASE.remove(id);
     }
 
     @CachePut(value = "users", key = "#user.id")
     public User updateUser(User user)
     {
+        LOGGER.info("Updating user in database and cache: {}", user.id());
         USER_DATABASE.put(user.id(), user);
         return user;
     }
@@ -67,11 +95,13 @@ public class UserServiceImpl implements UserService
     @CacheEvict(value = "users", allEntries = true)
     public void removeAllUsers()
     {
+        LOGGER.info("Removing all users from database and cache");
         USER_DATABASE.clear();
     }
 
     public Map<Long, User> getAllUsers()
     {
+        LOGGER.debug("Fetching all users from database");
         return Map.copyOf(USER_DATABASE);
     }
 
