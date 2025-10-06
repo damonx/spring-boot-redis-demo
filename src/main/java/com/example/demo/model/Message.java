@@ -3,7 +3,7 @@ package com.example.demo.model;
 import java.util.Objects;
 
 /**
- * A response class, containing a useful(?) message.
+ * A response class, containing a useful message.
  */
 public class Message
 {

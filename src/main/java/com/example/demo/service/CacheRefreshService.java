@@ -1,22 +1,15 @@
 package com.example.demo.service;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
-@Service
-public class CacheRefreshService {
-    private final UserService userService;
-
-    public CacheRefreshService(UserService userService) {
-        this.userService = userService;
-    }
+/**
+ * Interface for service responsible for asynchronously refreshing cached user data.
+ */
+public interface CacheRefreshService {
 
     /**
      * Asynchronously refreshes a user in the cache.
-     * @param id the user ID to refresh
+     * The implementation is typically responsible for calling a service method
+     * that uses @CachePut to update the cache entry.
+     * * @param id the user ID to refresh
      */
-    @Async
-    public void refreshUserAhead(Long id) {
-        userService.refreshUser(id); // dedicated refresh method in UserService
-    }
+    void refreshUserAhead(Long id);
 }
