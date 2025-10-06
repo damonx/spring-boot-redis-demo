@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockReset;
 import org.springframework.cache.CacheManager;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -29,10 +30,10 @@ import java.util.Map;
 @Tag("IntegrationTest")
 @DisplayName("User Service Redis Test with Redis running in TestContainer.")
 class UserServiceTest {
-    @MockBean
+    @MockBean(reset = MockReset.AFTER)
     private RefreshAheadScheduler refreshAheadScheduler;
 
-    @MockBean
+    @MockBean(reset = MockReset.AFTER)
     private UserAccessTracker userAccessTracker;
 
     @Container
@@ -52,8 +53,12 @@ class UserServiceTest {
 
     @BeforeEach
     void setup() {
-        // clear cache before each test
-        cacheManager.getCache("users").clear();
+        if (cacheManager != null) {
+            var usersCache = cacheManager.getCache("users");
+            if (usersCache != null) {
+                usersCache.clear();
+            }
+        }
     }
 
     @Test
@@ -177,8 +182,8 @@ class UserServiceTest {
             .isInstanceOf(UnsupportedOperationException.class);
     }
 
-    private Duration measure(Runnable r) {
-        long start = System.nanoTime();
+    private Duration measure(final Runnable r) {
+        final long start = System.nanoTime();
         r.run();
         return Duration.ofNanos(System.nanoTime() - start);
     }
