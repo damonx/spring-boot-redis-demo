@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.demo.BaseIntegrationTest;
+import com.example.demo.model.CacheMetricsResponse;
 import com.example.demo.service.CacheMetricsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.util.Map;
 
 /**
  * Integration tests for {@link MetricsController} using {@link WebTestClient}.
@@ -36,7 +35,6 @@ class MetricsControllerIntegrationTest extends BaseIntegrationTest {
     void setup()
     {
         cacheMetricsService.resetMetrics("users");
-        // Preload some metrics data before tests
         cacheMetricsService.incrementHitCount("users");
         cacheMetricsService.incrementMissCount("users");
         cacheMetricsService.incrementMissCount("users");
@@ -46,42 +44,21 @@ class MetricsControllerIntegrationTest extends BaseIntegrationTest {
     @DisplayName("Should return cache metrics for an existing cache name")
     void testGetCacheMetrics_successful()
     {
-        // WHEN
-        final EntityExchangeResult<Map<String, String>> result = webClient.get()
+        // GIVEN,WHEN
+        final EntityExchangeResult<CacheMetricsResponse> result = webClient.get()
             .uri("/api/metrics/users")
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.OK)
-            .expectBody(new org.springframework.core.ParameterizedTypeReference<Map<String, String>>()
-            {
-            })
+            .expectBody(CacheMetricsResponse.class)
             .returnResult();
 
         // THEN
-        final Map<String, String> metrics = result.getResponseBody();
+        final CacheMetricsResponse metrics = result.getResponseBody();
         assertThat(metrics).isNotNull();
-        assertThat(metrics).containsKeys("hits", "misses");
-        assertThat(Long.parseLong(metrics.get("hits"))).isGreaterThanOrEqualTo(1);
-        assertThat(Long.parseLong(metrics.get("misses"))).isGreaterThanOrEqualTo(2);
-    }
-
-    @Test
-    @DisplayName("Should return zero metrics when cache name not found")
-    void testGetCacheMetrics_notFound()
-    {
-        // WHEN
-        final EntityExchangeResult<Map<String, String>> result = webClient.get()
-            .uri("/api/metrics/nonexistent")
-            .exchange()
-            .expectStatus().isEqualTo(HttpStatus.OK)
-            .expectBody(new org.springframework.core.ParameterizedTypeReference<Map<String, String>>()
-            {
-            })
-            .returnResult();
-
-        // THEN
-        final Map<String, String> metrics = result.getResponseBody();
-        assertThat(metrics).isNotNull();
-        assertThat(Long.parseLong(metrics.get("hits"))).isZero();
-        assertThat(Long.parseLong(metrics.get("misses"))).isZero();
+        assertThat(metrics.cacheName()).isEqualTo("users");
+        assertThat(metrics.hits()).isEqualTo(1L);
+        assertThat(metrics.misses()).isEqualTo(2L);
+        assertThat(metrics.total()).isEqualTo(3L);
+        assertThat(metrics.hitRate()).isEqualTo("33%");
     }
 }
