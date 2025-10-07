@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.CacheMetricsResponse;
 import com.example.demo.service.CacheMetricsService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * REST controller exposing cache metrics via HTTP endpoints.
@@ -24,14 +23,15 @@ public class MetricsController {
      * @param cacheName the name of the cache
      * @return a map of metrics
      */
+    /**
+     * Retrieves metrics for a specific cache.
+     *
+     * @param cacheName The cache name.
+     * @return A {@link CacheMetricsResponse} containing hit/miss counts and hit rate.
+     */
     @GetMapping("/{cacheName}")
-    public Map<String, String> getMetrics(@PathVariable String cacheName) {
-        return Map.of(
-            "cacheName", cacheName,
-            "hits", metricsService.getHitCount(cacheName),
-            "misses", metricsService.getMissCount(cacheName),
-            "hitRate", metricsService.getHitRate(cacheName)
-        );
+    public CacheMetricsResponse getMetrics(@PathVariable String cacheName) {
+        return metricsService.generateCacheMetrics(cacheName);
     }
 
     /**

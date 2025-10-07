@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.CacheMetricsResponse;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -34,33 +35,17 @@ public class CacheMetricsServiceImpl implements CacheMetricsService
     }
 
     @Override
+    public CacheMetricsResponse generateCacheMetrics(final String cacheName)
+    {
+        final long hits = getHitCount(cacheName);
+        final long misses = getMissCount(cacheName);
+        return new CacheMetricsResponse(cacheName, hits, misses, hits + misses, getHitRate(cacheName));
+    }
+
+    @Override
     public void incrementMissCount(String cacheName)
     {
         redisTemplate.opsForValue().increment(MISS_KEY_PREFIX + cacheName);
-    }
-
-    @Override
-    public String getHitCount(String cacheName)
-    {
-        return getValue(HIT_KEY_PREFIX + cacheName);
-    }
-
-    @Override
-    public String getMissCount(String cacheName)
-    {
-        return getValue(MISS_KEY_PREFIX + cacheName);
-    }
-
-    @Override
-    public String getHitRate(final String cacheName)
-    {
-        long hits = Long.parseLong(getHitCount(cacheName));
-        long misses = Long.parseLong(getMissCount(cacheName));
-        long total = hits + misses;
-        if (total > 0) {
-            return Double.toString(total/(double)total);
-        }
-        return "0";
     }
 
     @Override
@@ -70,11 +55,32 @@ public class CacheMetricsServiceImpl implements CacheMetricsService
         redisTemplate.delete(MISS_KEY_PREFIX + cacheName);
     }
 
-    private String getValue(final String key)
+    private long getHitCount(String cacheName)
+    {
+        return getValue(HIT_KEY_PREFIX + cacheName);
+    }
+
+    private long getMissCount(String cacheName)
+    {
+        return getValue(MISS_KEY_PREFIX + cacheName);
+    }
+
+    private String getHitRate(final String cacheName)
+    {
+        long hits = getHitCount(cacheName);
+        long misses = getMissCount(cacheName);
+        long total = hits + misses;
+        if (total == 0) {
+            return "0%";
+        }
+        double rate = (double) hits / total * 100;
+        return String.format("%.0f%%", rate);
+    }
+
+    private long getValue(final String key)
     {
         return Optional.ofNullable(redisTemplate.opsForValue().get(key))
             .map(Long::parseLong)
-            .map(String::valueOf)
-            .orElse("0");
+            .orElse(0L);
     }
 }
