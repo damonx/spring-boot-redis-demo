@@ -63,7 +63,7 @@ When integration tests or the Spring Boot app starts, Testcontainers:
 
 
 ## ✅ Features
-- Spring Boot (Java 21 compatible)
+- Spring Boot 3.3.4+ (Java 21 compatible)
 - Redis cache with `LettuceConnectionFactory`
 - `@Cacheable`, `@CachePut`, and `@CacheEvict`
 - Custom TTL and serialization
