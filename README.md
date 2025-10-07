@@ -1,6 +1,37 @@
-# Spring Redis Demo
+# 🚀 Spring Redis Demo
 
-A Spring Boot application demonstrating caching with Redis, including Testcontainers-based integration tests.
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Redis](https://img.shields.io/badge/Redis-7.x-red.svg)](https://redis.io/)
+[![Testcontainers](https://img.shields.io/badge/Testcontainers-Redis-blue.svg)](https://www.testcontainers.org/)
+[![Build](https://img.shields.io/github/actions/workflow/status/yourusername/spring-redis-demo/gradle.yml?label=Build&logo=github)](https://github.com/yourusername/spring-redis-demo/actions)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+---
+
+## 📘 Overview
+
+**spring-redis-demo** is a Spring Boot sample project showcasing how to integrate **Redis caching**, **Spring Cache abstraction**, and **AOP-driven cache metrics** with **Micrometer observability** for Prometheus and Grafana dashboards.
+
+It demonstrates a clean, production-ready architecture where:
+- Cached methods are annotated with `@Cacheable` or `@CacheEvict`
+- Cache hits and misses are tracked automatically through **Spring AOP**
+- Metrics are stored in Redis and also exposed via **Micrometer**
+- Integration tests use **Testcontainers** to spin up an actual Redis instance
+
+---
+
+## 🧩 Key Features
+
+| Feature | Description |
+|----------|-------------|
+| 🧠 **Spring Cache with Redis** | Caching layer powered by Redis for performance and scalability. |
+| 🎯 **AOP-driven Metrics** | Spring AOP intercepts cache operations to track hits, misses, and hit rates. |
+| 📊 **Metrics in Redis** | Cache metrics are persisted in Redis (`metrics:cache:hit:*`, `metrics:cache:miss:*`). |
+| 🔍 **Micrometer / Prometheus Integration** | Exposes metrics at `/actuator/prometheus` for Grafana visualization. |
+| 🌐 **REST Metrics API** | Provides `/api/metrics/{cacheName}` to fetch real-time cache stats. |
+| 🧪 **Testcontainers Integration Tests** | Redis container ensures consistent test environments. |
+
+---
 
 ## ✅ 1. Prerequisites
 
