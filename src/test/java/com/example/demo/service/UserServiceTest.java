@@ -3,10 +3,10 @@ package com.example.demo.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import com.example.demo.BaseIntegrationTest;
 import com.example.demo.model.User;
 import com.example.demo.scheduler.RefreshAheadScheduler;
 import com.example.demo.tracker.UserAccessTracker;
-import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -16,20 +16,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockReset;
 import org.springframework.cache.CacheManager;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * User service test.
+ */
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("IntegrationTest")
 @DisplayName("User Service Redis Test with Redis running in TestContainer.")
-class UserServiceTest {
+class UserServiceTest extends BaseIntegrationTest
+{
     @MockBean(reset = MockReset.AFTER)
     private RefreshAheadScheduler refreshAheadScheduler;
     @MockBean(reset = MockReset.AFTER)
@@ -38,16 +39,6 @@ class UserServiceTest {
     private UserService userService;
     @Autowired
     private CacheManager cacheManager;
-
-    @Container
-    static RedisContainer redis = new RedisContainer("redis:7.0.11-alpine");
-
-    @DynamicPropertySource
-    static void redisProperties(final DynamicPropertyRegistry registry)
-    {
-        registry.add("spring.data.redis.host", redis::getHost);
-        registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
-    }
 
     @BeforeEach
     void setup() {

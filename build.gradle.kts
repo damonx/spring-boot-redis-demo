@@ -21,12 +21,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.springframework.boot:spring-boot-starter-web")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:testcontainers:1.21.3")
     testImplementation("com.redis:testcontainers-redis:2.2.4")
     testImplementation("org.testcontainers:junit-jupiter:1.21.3")
     testImplementation("org.assertj:assertj-core:3.27.6")
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0") // latest version
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
 }
 

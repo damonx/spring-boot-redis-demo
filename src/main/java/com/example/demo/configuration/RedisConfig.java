@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -43,5 +44,28 @@ public class RedisConfig {
         return RedisCacheManager.builder(redisConnectionFactory)
             .cacheDefaults(config)
             .build();
+    }
+
+    @Bean
+    public RedisTemplate<String, Long> redisTemplate(final LettuceConnectionFactory connectionFactory) {
+        RedisTemplate<String, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        StringRedisSerializer stringSerializer = new StringRedisSerializer();
+
+        // 1. Set Key Serializer (For the ZSet Name: "hotUsers")
+        // Use String serializer for keys
+        template.setKeySerializer(stringSerializer);
+
+        // 2. Set Value Serializer (For ZSet Members: Long userId)
+        // The general ValueSerializer is used for ZSet members.
+        // Converting the Long userId to a String for visibility in Redis is best.
+        template.setValueSerializer(stringSerializer);
+
+        // Since ZSet operations in the tracker are on the root template,
+        // these two general settings cover the ZSet key and member serialization.
+
+        template.afterPropertiesSet();
+        return template;
     }
 }
