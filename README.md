@@ -3,8 +3,6 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Redis](https://img.shields.io/badge/Redis-7.x-red.svg)](https://redis.io/)
 [![Testcontainers](https://img.shields.io/badge/Testcontainers-Redis-blue.svg)](https://www.testcontainers.org/)
-[![Build](https://img.shields.io/github/actions/workflow/status/yourusername/spring-redis-demo/gradle.yml?label=Build&logo=github)](https://github.com/yourusername/spring-redis-demo/actions)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
 
