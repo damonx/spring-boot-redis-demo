@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A tracker to find hot users.
@@ -15,11 +16,11 @@ public class UserAccessTracker
     private static final String HOT_USERS_KEY = "hotUsers";
 
     @Autowired
-    private RedisTemplate<String, Long> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     public void recordAccess(Long userId)
     {
-        redisTemplate.opsForZSet().incrementScore(HOT_USERS_KEY, userId, 1);
+        redisTemplate.opsForZSet().incrementScore(HOT_USERS_KEY, String.valueOf(userId), 1);
         // Optional: set expiry so stale users are removed automatically
         redisTemplate.expire(HOT_USERS_KEY, 1, java.util.concurrent.TimeUnit.HOURS);
     }
@@ -28,6 +29,9 @@ public class UserAccessTracker
     {
         // Get top N users by score descending
         return redisTemplate.opsForZSet()
-            .reverseRange(HOT_USERS_KEY, 0, topN - 1);
+            .reverseRange(HOT_USERS_KEY, 0, topN - 1)
+            .stream()
+            .map(Long::valueOf)
+            .collect(Collectors.toSet());
     }
 }

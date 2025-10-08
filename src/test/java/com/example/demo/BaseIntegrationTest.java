@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -35,5 +36,11 @@ public class BaseIntegrationTest {
     static void redisProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.redis.host", redis::getHost);
         registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
+    }
+
+    @AfterAll
+    static void afterAll()
+    {
+        redis.stop();
     }
 }

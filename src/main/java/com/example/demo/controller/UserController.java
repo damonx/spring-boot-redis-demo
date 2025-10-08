@@ -27,11 +27,4 @@ public class UserController {
         }
         return ResponseEntity.ok(userService.getUserById(id));
     }
-
-    @GetMapping
-    public ResponseEntity<Object> getAllUsers() {
-        return ResponseEntity.ok(
-            userService.getAllUsers()
-        );
-    }
 }

@@ -38,6 +38,7 @@ dependencies {
 
     // JUnit Platform launcher
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
 
 jacoco {
@@ -85,7 +86,6 @@ tasks.jacocoTestReport {
     executionData.setFrom(fileTree(layout.buildDirectory.get()).include("jacoco/test.exec"))
 }
 
-// ✅ Configure the existing JaCoCo coverage verification task
 tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     dependsOn(tasks.jacocoTestReport)
     violationRules {
