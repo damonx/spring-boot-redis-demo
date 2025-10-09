@@ -22,6 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
 
     // Jackson date/time
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

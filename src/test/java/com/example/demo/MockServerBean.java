@@ -23,7 +23,7 @@ public class MockServerBean
     // back before assuming there are no more.
     private static final int TEST_WAIT = 10;
     // Also in milliseconds.
-    private static final int SHUTDOWN_WAIT = 500;
+    private static final Duration SHUTDOWN_WAIT = Duration.ofMillis(500);
 
     public MockWebServer getServer()
     {
@@ -49,7 +49,7 @@ public class MockServerBean
             // This happens more when the server running this is under load (or has stupid anti-virus shit
             // interfering).
             try {
-                Thread.sleep(Duration.ofMillis(SHUTDOWN_WAIT));
+                Thread.sleep(SHUTDOWN_WAIT);
             } catch (final InterruptedException e2) {
                 Thread.currentThread().interrupt();
             }
