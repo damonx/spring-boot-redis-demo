@@ -18,12 +18,6 @@ public class MetricsController {
     }
 
     /**
-     * Retrieves cache metrics (hits, misses, hit rate) for a given cache.
-     *
-     * @param cacheName the name of the cache
-     * @return a map of metrics
-     */
-    /**
      * Retrieves metrics for a specific cache.
      *
      * @param cacheName The cache name.
